@@ -1,0 +1,250 @@
+================================================================================
+  QUBEai Installation Health Check Report
+  Generated: 2026-02-12 15:45:22 CST
+================================================================================
+
+SYSTEM INFORMATION
+──────────────────
+  Hostname:      Jetts-Mac-mini
+  User:          jettbtc
+  OS:            macOS 15.3.1
+  Architecture:  arm64
+  Shell:         /bin/zsh
+  Memory:        16 GB
+  Disk:          187 GB available of 494 GB
+  Home:          /Users/jettbtc
+  OpenClaw Dir:  /Users/jettbtc/.openclaw
+
+SUMMARY
+──────────────────
+  Passed:   17
+  Failed:   3
+  Warnings: 2
+  Total:    22
+
+DETAILED RESULTS
+──────────────────
+
+━━━ Core Dependencies ━━━
+
+  ✅ PASS  Homebrew
+          Homebrew 4.4.14
+
+  ✅ PASS  Node.js
+          v25.5.0 (>= v20 required)
+
+  ✅ PASS  npm
+          v10.9.2
+
+  ✅ PASS  Git
+          git version 2.48.1
+
+  ✅ PASS  curl
+          Available
+
+━━━ OpenClaw ━━━
+
+  ✅ PASS  OpenClaw CLI
+          2026.2.6-3
+
+  ✅ PASS  OpenClaw config
+          /Users/jettbtc/.openclaw/openclaw.json
+
+  ✅ PASS  Config JSON valid
+          Parsed successfully
+
+  ✅ PASS  Directory: workspaces/
+          Exists
+
+  ✅ PASS  Directory: agents/
+          Exists
+
+  ✅ PASS  Directory: logs/
+          Exists
+
+  ✅ PASS  Agent configured
+          ID: jett
+
+  ✅ PASS  Agent workspace
+          /Users/jettbtc/.openclaw/workspaces/jett
+
+  ❌ FAIL  Gateway running
+          Not running
+          [VERBOSE] Error: Cannot find module '/opt/homebrew/lib/node_modules/openclaw/dist/gateway.js'
+          at Module._resolveFilename (node:internal/modules/cjs/loader:1145:15)
+          at Module._load (node:internal/modules/cjs/loader:986:27)
+          Suggestion: Try reinstalling openclaw: npm install -g openclaw
+
+  ⚠️  WARN  Auto-start (LaunchAgent)
+          Plist exists but not loaded — run: launchctl load ~/Library/LaunchAgents/com.openclaw.gateway.plist
+
+━━━ Telegram ━━━
+
+  ✅ PASS  Telegram channel
+          Enabled in config
+
+  ✅ PASS  Telegram bot token
+          Present in config
+
+  ✅ PASS  Telegram allowFrom
+          @jettbtc
+
+━━━ Anthropic API ━━━
+
+  ✅ PASS  API key (env)
+          Set (sk-ant-api...)
+
+  ✅ PASS  API key (auth file)
+          /Users/jettbtc/.openclaw/auth/anthropic_default.json exists
+
+  ✅ PASS  Auth file permissions
+          600 (secure)
+
+  ✅ PASS  Anthropic API connectivity
+          API responded 200 OK
+
+━━━ Google Workspace (gog) ━━━
+
+  ❌ FAIL  gog CLI
+          Not installed
+          [VERBOSE] brew install steipete/tap/gogcli returned exit code 1:
+          ==> Fetching steipete/tap/gogcli
+          ==> Downloading https://github.com/steipete/gogcli/releases/download/v0.9.0/gog_0.9.0_darwin_arm64.tar.gz
+          curl: (35) LibreSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443
+          Error: Failed to download resource "gogcli"
+          
+          Suggestion: Check internet connection and retry: brew install steipete/tap/gogcli
+          If the issue persists, try: brew update && brew install steipete/tap/gogcli
+
+━━━ Chrome Browser ━━━
+
+  ❌ FAIL  Google Chrome
+          Not found at /Applications/Google Chrome.app
+          [VERBOSE] Google Chrome is required for browser automation.
+          The installer expected Chrome at /Applications/Google Chrome.app but it was not found.
+          
+          This could mean:
+          1. Chrome was never installed on this machine
+          2. Chrome is installed in a non-standard location
+          3. Chrome was removed after initial setup
+          
+          Resolution:
+          - Download Chrome from: https://www.google.com/chrome/
+          - Install it to /Applications/ (default location)
+          - After installing, launch Chrome once to complete setup
+          - Then start Chrome with debugging enabled:
+            /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
+              --remote-debugging-port=9222 \
+              --user-data-dir="$HOME/.openclaw/browser/openclaw/user-data" &
+
+  ⚠️  WARN  Chrome CDP (port 9222)
+          Not reachable — Chrome may not be running with --remote-debugging-port=9222
+
+━━━ Network ━━━
+
+  ✅ PASS  Internet connectivity
+          Online
+
+  ✅ PASS  DNS resolution
+          Working
+
+CONFIGURATION (REDACTED)
+──────────────────
+{
+  "env": {
+    "shellEnv": {
+      "enabled": true,
+      "timeoutMs": 15000
+    }
+  },
+  "logging": {
+    "level": "info",
+    "consoleLevel": "info",
+    "consoleStyle": "pretty",
+    "redactSensitive": "tools"
+  },
+  "update": {
+    "checkOnStart": true
+  },
+  "browser": {
+    "enabled": true,
+    "executablePath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "headless": false,
+    "noSandbox": false,
+    "defaultProfile": "openclaw",
+    "profiles": {
+      "openclaw": {
+        "cdpPort": 9222
+      }
+    }
+  },
+  "auth": {
+    "profiles": {
+      "anthropic:default": {
+        "provider": "anthropic",
+        "mode": "***REDACTED***"
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "anthropic/claude-sonnet-4",
+        "fallbacks": []
+      },
+      "elevatedDefault": "full",
+      "sandbox": {
+        "mode": "off"
+      }
+    },
+    "list": [
+      {
+        "id": "main"
+      },
+      {
+        "id": "jett",
+        "name": "jett",
+        "model": "anthropic/claude-sonnet-4"
+      }
+    ]
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "botToken": "***REDACTED***",
+      "allowFrom": [
+        "@jettbtc"
+      ]
+    }
+  }
+}
+
+ENVIRONMENT
+──────────────────
+  PATH: /opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+  NODE: /opt/homebrew/bin/node — v25.5.0
+  NPM:  /opt/homebrew/bin/npm — 10.9.2
+  BREW: /opt/homebrew/bin/brew
+  GOG:  not found
+  OPENCLAW: /opt/homebrew/bin/openclaw
+  CHROME: not found
+
+RECENT GATEWAY LOGS (last 50 lines)
+──────────────────
+[2026-02-12T21:43:18.123Z] INFO  gateway starting on port 18789
+[2026-02-12T21:43:18.456Z] INFO  loading config from /Users/jettbtc/.openclaw/openclaw.json
+[2026-02-12T21:43:18.789Z] INFO  telegram plugin loaded
+[2026-02-12T21:43:19.012Z] WARN  browser: Chrome not found at configured path
+[2026-02-12T21:43:19.234Z] INFO  agent "jett" registered (model: anthropic/claude-sonnet-4)
+[2026-02-12T21:43:19.456Z] INFO  gateway ready — listening on 127.0.0.1:18789
+[2026-02-12T21:43:22.789Z] INFO  telegram: bot connected (@JettAssistantBot)
+[2026-02-12T21:43:22.890Z] INFO  telegram: polling for updates...
+[2026-02-12T21:44:01.123Z] ERROR gog skill: binary not found in PATH
+[2026-02-12T21:44:01.124Z] WARN  skills: gog disabled (dependency missing)
+
+================================================================================
+  End of Report
+  To send this report to QUBEai support:
+  Email: support@blockchaintek.com
+  Attach: /tmp/qubeai-healthcheck/qubeai-healthcheck-2026-02-12_15-45-22.txt
+================================================================================
