@@ -1,10 +1,16 @@
 ================================================================================
   QUBEai Installation Health Check Report
+  Report ID: a3f2b8d4
   Generated: 2026-02-12 15:45:22 CST
+  Script Version: 2.0.0
 ================================================================================
 
+HEALTH SUMMARY: FAIL — 24 passed, 3 failed, 4 warnings
+
+================================================================================
 SYSTEM INFORMATION
-──────────────────
+================================================================================
+  Timestamp:     2026-02-12 15:45:22 CST
   Hostname:      Jetts-Mac-mini
   User:          jettbtc
   OS:            macOS 15.3.1
@@ -15,18 +21,19 @@ SYSTEM INFORMATION
   Home:          /Users/jettbtc
   OpenClaw Dir:  /Users/jettbtc/.openclaw
 
-SUMMARY
-──────────────────
-  Passed:   17
+================================================================================
+TEST RESULTS SUMMARY
+================================================================================
+  Passed:   24
   Failed:   3
-  Warnings: 2
-  Total:    22
+  Warnings: 4
+  Total:    31
+  
+  Overall Status: FAIL
 
-DETAILED RESULTS
-──────────────────
-
-━━━ Core Dependencies ━━━
-
+================================================================================
+DETAILED TEST RESULTS
+================================================================================
   ✅ PASS  Homebrew
           Homebrew 4.4.14
 
@@ -36,13 +43,23 @@ DETAILED RESULTS
   ✅ PASS  npm
           v10.9.2
 
+  ✅ PASS  Python3
+          Python 3.12.8
+
   ✅ PASS  Git
           git version 2.48.1
 
   ✅ PASS  curl
           Available
 
-━━━ OpenClaw ━━━
+  ✅ PASS  Admin rights
+          User has admin privileges
+
+  ✅ PASS  System Integrity Protection
+          Enabled (secure)
+
+  ✅ PASS  Disk space
+          187 GB available
 
   ✅ PASS  OpenClaw CLI
           2026.2.6-3
@@ -62,6 +79,9 @@ DETAILED RESULTS
   ✅ PASS  Directory: logs/
           Exists
 
+  ✅ PASS  Directory: auth/
+          Exists
+
   ✅ PASS  Agent configured
           ID: jett
 
@@ -75,10 +95,23 @@ DETAILED RESULTS
           at Module._load (node:internal/modules/cjs/loader:986:27)
           Suggestion: Try reinstalling openclaw: npm install -g openclaw
 
-  ⚠️  WARN  Auto-start (LaunchAgent)
-          Plist exists but not loaded — run: launchctl load ~/Library/LaunchAgents/com.openclaw.gateway.plist
+  ⚠️  WARN  Auto-start loaded
+          Plist exists but not loaded — run: launchctl load /Users/jettbtc/Library/LaunchAgents/com.openclaw.gateway.plist
 
-━━━ Telegram ━━━
+  ✅ PASS  brew doctor
+          No issues found
+
+  ✅ PASS  Homebrew packages
+          87 packages installed
+
+  ✅ PASS  npm global prefix
+          /opt/homebrew
+
+  ✅ PASS  npm global packages
+          12 packages installed
+
+  ✅ PASS  openclaw in npm globals
+          Found
 
   ✅ PASS  Telegram channel
           Enabled in config
@@ -88,8 +121,6 @@ DETAILED RESULTS
 
   ✅ PASS  Telegram allowFrom
           @jettbtc
-
-━━━ Anthropic API ━━━
 
   ✅ PASS  API key (env)
           Set (sk-ant-api...)
@@ -103,53 +134,352 @@ DETAILED RESULTS
   ✅ PASS  Anthropic API connectivity
           API responded 200 OK
 
-━━━ Google Workspace (gog) ━━━
-
-  ❌ FAIL  gog CLI
-          Not installed
-          [VERBOSE] brew install steipete/tap/gogcli returned exit code 1:
-          ==> Fetching steipete/tap/gogcli
-          ==> Downloading https://github.com/steipete/gogcli/releases/download/v0.9.0/gog_0.9.0_darwin_arm64.tar.gz
-          curl: (35) LibreSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443
-          Error: Failed to download resource "gogcli"
-          
-          Suggestion: Check internet connection and retry: brew install steipete/tap/gogcli
-          If the issue persists, try: brew update && brew install steipete/tap/gogcli
-
-━━━ Chrome Browser ━━━
-
-  ❌ FAIL  Google Chrome
-          Not found at /Applications/Google Chrome.app
-          [VERBOSE] Google Chrome is required for browser automation.
-          The installer expected Chrome at /Applications/Google Chrome.app but it was not found.
-          
-          This could mean:
-          1. Chrome was never installed on this machine
-          2. Chrome is installed in a non-standard location
-          3. Chrome was removed after initial setup
-          
-          Resolution:
-          - Download Chrome from: https://www.google.com/chrome/
-          - Install it to /Applications/ (default location)
-          - After installing, launch Chrome once to complete setup
-          - Then start Chrome with debugging enabled:
-            /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
-              --remote-debugging-port=9222 \
-              --user-data-dir="$HOME/.openclaw/browser/openclaw/user-data" &
-
-  ⚠️  WARN  Chrome CDP (port 9222)
-          Not reachable — Chrome may not be running with --remote-debugging-port=9222
-
-━━━ Network ━━━
-
   ✅ PASS  Internet connectivity
           Online
 
   ✅ PASS  DNS resolution
           Working
 
-CONFIGURATION (REDACTED)
-──────────────────
+  ✅ PASS  Connectivity: api.anthropic.com
+          HTTP 200
+
+  ✅ PASS  Connectivity: github.com
+          HTTP 200
+
+  ✅ PASS  Connectivity: registry.npmjs.org
+          HTTP 200
+
+  ✅ PASS  Connectivity: api.telegram.org
+          HTTP 200
+
+  ✅ PASS  Proxy settings
+          No proxy configured
+
+  ✅ PASS  VPN detection
+          No VPN interfaces detected
+
+  ✅ PASS  macOS Firewall
+          Enabled
+
+  ❌ FAIL  gog CLI
+          Not installed
+          [VERBOSE] Install: brew install steipete/tap/gogcli. If brew install failed, check: brew doctor
+
+  ❌ FAIL  Google Chrome
+          Not found at /Applications/Google Chrome.app
+          [VERBOSE] Download from: https://www.google.com/chrome/
+
+  ⚠️  WARN  Chrome processes
+          No Chrome processes detected — Chrome may not be running
+
+  ⚠️  WARN  Chrome CDP (port 9222)
+          Not reachable — Chrome may not be running with --remote-debugging-port=9222
+
+  ⚠️  WARN  Browser profile directory
+          Not yet created — will be created on first browser use
+
+  ✅ PASS  Shell config (.zshrc)
+          Exists
+
+  ✅ PASS  Shell PATH config
+          Found brew/node/npm/openclaw references in .zshrc
+
+
+================================================================================
+VERBOSE DIAGNOSTIC DATA
+================================================================================
+
+──────────────────────────────────────────────────────────────────────────────
+ENVIRONMENT VARIABLES
+──────────────────────────────────────────────────────────────────────────────
+PATH: /opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+NODE: /opt/homebrew/bin/node — v25.5.0
+NPM:  /opt/homebrew/bin/npm — v10.9.2
+PYTHON3: /opt/homebrew/bin/python3 — Python 3.12.8
+BREW: /opt/homebrew/bin/brew
+GOG:  not found
+OPENCLAW: /opt/homebrew/bin/openclaw
+
+──────────────────────────────────────────────────────────────────────────────
+HOMEBREW DIAGNOSTICS (brew doctor)
+──────────────────────────────────────────────────────────────────────────────
+Your system is ready to brew.
+
+──────────────────────────────────────────────────────────────────────────────
+HOMEBREW INSTALLED PACKAGES (brew list)
+──────────────────────────────────────────────────────────────────────────────
+==> Formulae
+cairo
+ffmpeg
+fontconfig
+freetype
+fribidi
+gcc
+gettext
+glib
+gmp
+gnutls
+graphite2
+harfbuzz
+highway
+imagemagick
+imath
+jpeg-turbo
+jpeg-xl
+lame
+libass
+libb2
+libbluray
+libevent
+libheif
+libidn2
+liblqr
+libnghttp2
+libogg
+libpng
+libraw
+librsvg
+libsamplerate
+libsndfile
+libsodium
+libsoxr
+libtasn1
+libtiff
+libtool
+libunibreak
+libunistring
+libusb
+libvorbis
+libvpx
+libx11
+libxau
+libxcb
+libxdmcp
+libxext
+libxrender
+little-cms2
+lzo
+mbedtls
+nettle
+node
+opencore-amr
+openexr
+openjpeg
+openssl@3
+opus
+p11-kit
+pango
+pcre2
+pixman
+python@3.12
+rav1e
+readline
+rubberband
+sdl2
+snappy
+speex
+sqlite
+srt
+svt-av1
+tesseract
+theora
+unbound
+webp
+x264
+x265
+xvid
+xz
+zeromq
+
+==> Casks
+google-chrome (not installed)
+
+──────────────────────────────────────────────────────────────────────────────
+NPM CONFIGURATION (npm config list)
+──────────────────────────────────────────────────────────────────────────────
+; "user" config from /Users/jettbtc/.npmrc
+
+; node bin location = /opt/homebrew/Cellar/node/25.5.0/bin/node
+; node version = v25.5.0
+; npm local prefix = /Users/jettbtc
+; npm version = 10.9.2
+; cwd = /Users/jettbtc
+; HOME = /Users/jettbtc
+; Run `npm config ls -l` to show all defaults.
+
+──────────────────────────────────────────────────────────────────────────────
+NPM GLOBAL PACKAGES (npm list -g --depth=0)
+──────────────────────────────────────────────────────────────────────────────
+/opt/homebrew/lib
+├── corepack@0.31.0
+├── npm@10.9.2
+├── openclaw@2026.2.6-3
+└── yarn@1.22.22
+
+──────────────────────────────────────────────────────────────────────────────
+OPENCLAW DIRECTORY STRUCTURE (ls -la ~/.openclaw/)
+──────────────────────────────────────────────────────────────────────────────
+total 16
+drwxr-xr-x  10 jettbtc  staff   320 Feb 12 15:30 .
+drwxr-x---+ 45 jettbtc  staff  1440 Feb 12 15:45 ..
+drwxr-xr-x   3 jettbtc  staff    96 Feb 10 14:22 agents
+drwxr-xr-x   3 jettbtc  staff    96 Feb 12 15:30 auth
+drwxr-xr-x   4 jettbtc  staff   128 Feb 12 10:15 browser
+drwxr-xr-x   5 jettbtc  staff   160 Feb 12 15:43 logs
+-rw-r--r--   1 jettbtc  staff  2847 Feb 12 15:25 openclaw.json
+drwxr-xr-x   4 jettbtc  staff   128 Feb 10 14:22 skills
+drwxr-xr-x   3 jettbtc  staff    96 Feb 10 14:22 workspaces
+
+/Users/jettbtc/.openclaw/agents:
+total 0
+drwxr-xr-x   3 jettbtc  staff   96 Feb 10 14:22 .
+drwxr-xr-x  10 jettbtc  staff  320 Feb 12 15:30 ..
+drwxr-xr-x   7 jettbtc  staff  224 Feb 11 09:15 jett
+
+/Users/jettbtc/.openclaw/agents/jett:
+total 32
+drwxr-xr-x  7 jettbtc  staff  224 Feb 11 09:15 .
+drwxr-xr-x  3 jettbtc  staff   96 Feb 10 14:22 ..
+-rw-r--r--  1 jettbtc  staff  892 Feb 10 14:22 AGENTS.md
+-rw-r--r--  1 jettbtc  staff  156 Feb 11 09:15 MEMORY.md
+-rw-r--r--  1 jettbtc  staff  234 Feb 10 14:22 SOUL.md
+-rw-r--r--  1 jettbtc  staff   89 Feb 10 14:22 TOOLS.md
+-rw-r--r--  1 jettbtc  staff  127 Feb 10 14:22 USER.md
+
+/Users/jettbtc/.openclaw/auth:
+total 8
+drwxr-xr-x   3 jettbtc  staff   96 Feb 12 15:30 .
+drwxr-xr-x  10 jettbtc  staff  320 Feb 12 15:30 ..
+-rw-------   1 jettbtc  staff   89 Feb 12 15:30 anthropic_default.json
+
+/Users/jettbtc/.openclaw/browser:
+total 0
+drwxr-xr-x  4 jettbtc  staff  128 Feb 12 10:15 .
+drwxr-xr-x 10 jettbtc  staff  320 Feb 12 15:30 ..
+drwxr-xr-x  3 jettbtc  staff   96 Feb 12 10:15 openclaw
+
+/Users/jettbtc/.openclaw/browser/openclaw:
+total 0
+drwxr-xr-x  3 jettbtc  staff  96 Feb 12 10:15 .
+drwxr-xr-x  4 jettbtc  staff 128 Feb 12 10:15 ..
+(user-data directory would be created here)
+
+/Users/jettbtc/.openclaw/logs:
+total 1024
+drwxr-xr-x   5 jettbtc  staff     160 Feb 12 15:43 .
+drwxr-xr-x  10 jettbtc  staff     320 Feb 12 15:30 ..
+-rw-r--r--   1 jettbtc  staff  245678 Feb 12 15:43 gateway.err.log
+-rw-r--r--   1 jettbtc  staff  312456 Feb 12 15:43 gateway.out.log
+
+/Users/jettbtc/.openclaw/skills:
+total 0
+drwxr-xr-x  4 jettbtc  staff  128 Feb 10 14:22 .
+drwxr-xr-x 10 jettbtc  staff  320 Feb 12 15:30 ..
+(installed skills would appear here)
+
+/Users/jettbtc/.openclaw/workspaces:
+total 0
+drwxr-xr-x  3 jettbtc  staff   96 Feb 10 14:22 .
+drwxr-xr-x 10 jettbtc  staff  320 Feb 12 15:30 ..
+drwxr-xr-x  8 jettbtc  staff  256 Feb 11 16:30 jett
+
+/Users/jettbtc/.openclaw/workspaces/jett:
+total 48
+drwxr-xr-x   8 jettbtc  staff   256 Feb 11 16:30 .
+drwxr-xr-x   3 jettbtc  staff    96 Feb 10 14:22 ..
+-rw-r--r--   1 jettbtc  staff   234 Feb 11 10:22 README.md
+drwxr-xr-x   4 jettbtc  staff   128 Feb 11 11:45 memory
+drwxr-xr-x  12 jettbtc  staff   384 Feb 11 16:30 projects
+
+──────────────────────────────────────────────────────────────────────────────
+OPENCLAW AUTH DIRECTORY PERMISSIONS (ls -la ~/.openclaw/auth/)
+──────────────────────────────────────────────────────────────────────────────
+total 8
+drwxr-xr-x   3 jettbtc  staff   96 Feb 12 15:30 .
+drwxr-xr-x  10 jettbtc  staff  320 Feb 12 15:30 ..
+-rw-------   1 jettbtc  staff   89 Feb 12 15:30 anthropic_default.json
+
+──────────────────────────────────────────────────────────────────────────────
+LAUNCHCTL SERVICE STATUS (launchctl list | grep openclaw)
+──────────────────────────────────────────────────────────────────────────────
+-	0	com.openclaw.gateway
+
+──────────────────────────────────────────────────────────────────────────────
+CHROME PROCESSES (ps aux | grep -i chrome)
+──────────────────────────────────────────────────────────────────────────────
+(No Chrome processes found)
+
+──────────────────────────────────────────────────────────────────────────────
+DISK SPACE DETAIL (df -h)
+──────────────────────────────────────────────────────────────────────────────
+Filesystem       Size   Used  Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s1s1  494Gi  295Gi  187Gi    62%  488950 1961k   20%   /
+devfs           198Ki  198Ki    0Bi   100%     685     0  100%   /dev
+/dev/disk3s6    494Gi  2.0Gi  187Gi     2%       2 1961k    0%   /System/Volumes/VM
+/dev/disk3s2    494Gi  542Mi  187Gi     1%     678 1961k    0%   /System/Volumes/Preboot
+/dev/disk3s4    494Gi  1.5Mi  187Gi     1%      49 1961k    0%   /System/Volumes/Update
+/dev/disk1s2    500Mi  6.0Mi  481Mi     2%       1 4929k    0%   /System/Volumes/xarts
+/dev/disk1s1    500Mi  7.4Mi  481Mi     2%      33 4929k    0%   /System/Volumes/iSCPreboot
+/dev/disk1s3    500Mi  472Ki  481Mi     1%      50 4929k    0%   /System/Volumes/Hardware
+/dev/disk3s5    494Gi  8.3Gi  187Gi     5%  347251 1961k   15%   /System/Volumes/Data
+
+──────────────────────────────────────────────────────────────────────────────
+SHELL PROFILE CONTENTS (redacted - .zshrc)
+──────────────────────────────────────────────────────────────────────────────
+Lines containing PATH, brew, node, openclaw, npm:
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+export ANTHROPIC_API_KEY="sk-ant-***REDACTED***"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+──────────────────────────────────────────────────────────────────────────────
+SHELL PROFILE CONTENTS (redacted - .zprofile)
+──────────────────────────────────────────────────────────────────────────────
+Lines containing PATH, brew, node, openclaw, npm:
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+──────────────────────────────────────────────────────────────────────────────
+SYSTEM LOGS - RECENT OPENCLAW/NODE ENTRIES (last 10 minutes)
+──────────────────────────────────────────────────────────────────────────────
+2026-02-12 15:43:18.123456 CST  node[12345]  <Notice>: gateway starting on port 18789
+2026-02-12 15:43:18.456789 CST  node[12345]  <Notice>: loading config from /Users/jettbtc/.openclaw/openclaw.json
+2026-02-12 15:43:18.789012 CST  node[12345]  <Notice>: telegram plugin loaded
+2026-02-12 15:43:19.012345 CST  node[12345]  <Warning>: browser: Chrome not found at configured path
+2026-02-12 15:43:19.234567 CST  node[12345]  <Notice>: agent "jett" registered (model: anthropic/claude-sonnet-4)
+2026-02-12 15:43:19.456789 CST  node[12345]  <Notice>: gateway ready — listening on 127.0.0.1:18789
+2026-02-12 15:43:22.789012 CST  node[12345]  <Notice>: telegram: bot connected (@JettAssistantBot)
+2026-02-12 15:43:22.890123 CST  node[12345]  <Notice>: telegram: polling for updates...
+2026-02-12 15:44:01.123456 CST  node[12345]  <Error>: gog skill: binary not found in PATH
+2026-02-12 15:44:01.124567 CST  node[12345]  <Warning>: skills: gog disabled (dependency missing)
+
+──────────────────────────────────────────────────────────────────────────────
+OPENCLAW GATEWAY LOG (FULL - gateway.err.log)
+──────────────────────────────────────────────────────────────────────────────
+[2026-02-12T21:43:18.123Z] INFO  gateway starting on port 18789
+[2026-02-12T21:43:18.456Z] INFO  loading config from /Users/jettbtc/.openclaw/openclaw.json
+[2026-02-12T21:43:18.789Z] INFO  telegram plugin loaded
+[2026-02-12T21:43:19.012Z] WARN  browser: Chrome not found at configured path
+[2026-02-12T21:43:19.234Z] INFO  agent "jett" registered (model: anthropic/claude-sonnet-4)
+[2026-02-12T21:43:19.456Z] INFO  gateway ready — listening on 127.0.0.1:18789
+[2026-02-12T21:43:22.789Z] INFO  telegram: bot connected (@JettAssistantBot)
+[2026-02-12T21:43:22.890Z] INFO  telegram: polling for updates...
+[2026-02-12T21:44:01.123Z] ERROR gog skill: binary not found in PATH
+[2026-02-12T21:44:01.124Z] WARN  skills: gog disabled (dependency missing)
+[2026-02-12T21:44:05.456Z] INFO  telegram: received message from @jettbtc
+[2026-02-12T21:44:05.678Z] INFO  session started: agent=jett, channel=telegram
+[2026-02-12T21:44:06.123Z] INFO  model: anthropic/claude-sonnet-4 (usage: prompt=145, completion=89)
+[2026-02-12T21:44:06.456Z] INFO  response sent (221ms)
+
+──────────────────────────────────────────────────────────────────────────────
+OPENCLAW GATEWAY LOG (FULL - gateway.out.log)
+──────────────────────────────────────────────────────────────────────────────
+Gateway started successfully
+Listening on 127.0.0.1:18789
+PID: 12345
+
+──────────────────────────────────────────────────────────────────────────────
+OPENCLAW CONFIGURATION (REDACTED)
+──────────────────────────────────────────────────────────────────────────────
 {
   "env": {
     "shellEnv": {
@@ -219,32 +549,15 @@ CONFIGURATION (REDACTED)
   }
 }
 
-ENVIRONMENT
-──────────────────
-  PATH: /opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-  NODE: /opt/homebrew/bin/node — v25.5.0
-  NPM:  /opt/homebrew/bin/npm — 10.9.2
-  BREW: /opt/homebrew/bin/brew
-  GOG:  not found
-  OPENCLAW: /opt/homebrew/bin/openclaw
-  CHROME: not found
-
-RECENT GATEWAY LOGS (last 50 lines)
-──────────────────
-[2026-02-12T21:43:18.123Z] INFO  gateway starting on port 18789
-[2026-02-12T21:43:18.456Z] INFO  loading config from /Users/jettbtc/.openclaw/openclaw.json
-[2026-02-12T21:43:18.789Z] INFO  telegram plugin loaded
-[2026-02-12T21:43:19.012Z] WARN  browser: Chrome not found at configured path
-[2026-02-12T21:43:19.234Z] INFO  agent "jett" registered (model: anthropic/claude-sonnet-4)
-[2026-02-12T21:43:19.456Z] INFO  gateway ready — listening on 127.0.0.1:18789
-[2026-02-12T21:43:22.789Z] INFO  telegram: bot connected (@JettAssistantBot)
-[2026-02-12T21:43:22.890Z] INFO  telegram: polling for updates...
-[2026-02-12T21:44:01.123Z] ERROR gog skill: binary not found in PATH
-[2026-02-12T21:44:01.124Z] WARN  skills: gog disabled (dependency missing)
-
 ================================================================================
   End of Report
+  Report ID: a3f2b8d4
+  Generated: 2026-02-12 15:45:22 CST
+  Script Version: 2.0.0
+================================================================================
+  
   To send this report to QUBEai support:
   Email: support@blockchaintek.com
-  Attach: /tmp/qubeai-healthcheck/qubeai-healthcheck-2026-02-12_15-45-22.txt
+  Attach: /tmp/qubeai-healthcheck/qubeai-healthcheck-a3f2b8d4-2026-02-12_15-45-22.txt
+  
 ================================================================================
