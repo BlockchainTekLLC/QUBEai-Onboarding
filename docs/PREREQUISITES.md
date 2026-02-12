@@ -93,20 +93,6 @@ gog auth add your@gmail.com --services gmail,calendar,drive,contacts,docs,sheets
 
 ---
 
-### 6. Brave Search API Key (Optional)
-
-For web search capabilities.
-
-**How to get it:**
-1. Go to [brave.com/search/api](https://brave.com/search/api)
-2. Sign up for an API key
-3. Free tier: 2,000 queries/month
-4. **Save the API key**
-
-**Note:** Web search is optional. Skip this if you don't need it.
-
----
-
 ## Quick Checklist
 
 Before running the installer, make sure you have:
@@ -116,7 +102,6 @@ Before running the installer, make sure you have:
 - [ ] **Your Telegram @username** (e.g., `@johndoe`)
 - [ ] **Your Telegram user ID** (e.g., `123456789`)
 - [ ] **Google OAuth credentials** (optional, `client_secret.json`)
-- [ ] **Brave Search API key** (optional)
 
 ---
 

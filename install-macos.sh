@@ -57,8 +57,6 @@ read -p "$(echo -e ${BOLD})Your Telegram @username (e.g., @willmkultra): $(echo 
 read -p "$(echo -e ${BOLD})Your Telegram numeric user ID: $(echo -e ${NC})" TELEGRAM_ID
 [ -z "$TELEGRAM_ID" ] && err "Telegram user ID is required"
 
-read -p "$(echo -e ${BOLD})Brave Search API key (optional, press Enter to skip): $(echo -e ${NC})" BRAVE_KEY
-
 read -p "$(echo -e ${BOLD})Timezone (e.g., America/Chicago): $(echo -e ${NC})" TIMEZONE
 TIMEZONE="${TIMEZONE:-America/Chicago}"
 
@@ -172,14 +170,6 @@ log "Auth configured"
 # ============================================================
 step "Writing OpenClaw configuration..."
 
-# Build search config
-SEARCH_CONFIG=""
-if [ -n "$BRAVE_KEY" ]; then
-    SEARCH_CONFIG="\"search\": { \"enabled\": true, \"provider\": \"brave\", \"apiKey\": \"${BRAVE_KEY}\" },"
-else
-    SEARCH_CONFIG="\"search\": { \"enabled\": false },"
-fi
-
 cat > "${OPENCLAW_DIR}/openclaw.json" <<CFGEOF
 {
   "env": {
@@ -254,7 +244,7 @@ cat > "${OPENCLAW_DIR}/openclaw.json" <<CFGEOF
   "tools": {
     "profile": "full",
     "web": {
-      ${SEARCH_CONFIG}
+      "search": { "enabled": false },
       "fetch": { "enabled": true }
     },
     "elevated": {
