@@ -93,6 +93,50 @@ gog auth add your@gmail.com --services gmail,calendar,drive,contacts,docs,sheets
 
 ---
 
+### 6. Google Chrome — Enable Remote Debugging
+
+Your AI assistant uses Chrome for browser automation (web searches, reading pages, filling forms, etc.). This requires Chrome's remote debugging protocol (CDP) to be enabled.
+
+**Install Chrome (if you don't have it):**
+1. Download from [google.com/chrome](https://www.google.com/chrome/)
+2. Install and open it once
+
+**Enable Remote Debugging on macOS:**
+
+You need to launch Chrome with a special flag. The easiest way is to create a shortcut:
+
+1. Open **Terminal**
+2. Run this command to create a launcher script:
+
+```bash
+cat > ~/start-chrome-debug.sh << 'EOF'
+#!/bin/bash
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
+  --remote-debugging-port=9222 \
+  --user-data-dir="$HOME/.openclaw/browser/openclaw/user-data" &
+EOF
+chmod +x ~/start-chrome-debug.sh
+```
+
+3. From now on, start Chrome for your assistant with:
+```bash
+~/start-chrome-debug.sh
+```
+
+**Verify it's working:**
+1. Make sure Chrome is running with the debug flag (use the script above)
+2. Open a new tab and go to: `http://localhost:9222/json`
+3. You should see a JSON response listing your open tabs
+4. If you see "connection refused," Chrome isn't running with debugging enabled
+
+**Important notes:**
+- This Chrome instance is separate from your normal Chrome (it uses its own profile directory)
+- The assistant uses port **9222** by default
+- You only need to start Chrome this way when you want the assistant to use the browser
+- The installer configures OpenClaw to use this automatically
+
+---
+
 ## Quick Checklist
 
 Before running the installer, make sure you have:
@@ -102,6 +146,7 @@ Before running the installer, make sure you have:
 - [ ] **Your Telegram @username** (e.g., `@johndoe`)
 - [ ] **Your Telegram user ID** (e.g., `123456789`)
 - [ ] **Google OAuth credentials** (optional, `client_secret.json`)
+- [ ] **Google Chrome installed** (for browser automation)
 
 ---
 
