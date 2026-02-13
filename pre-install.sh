@@ -227,7 +227,24 @@ if [ -n "$TG_USERNAME" ]; then
 fi
 
 # ============================================================
-# Step 5: Install Visual Studio Code
+# Step 5: Install Google Chrome (needed for browser automation / CDP)
+# ============================================================
+step "Checking Google Chrome..."
+if [ -d "/Applications/Google Chrome.app" ]; then
+    log "Google Chrome already installed"
+else
+    info "Installing Google Chrome..."
+    brew install --cask google-chrome 2>&1 | tail -5
+    if [ -d "/Applications/Google Chrome.app" ]; then
+        log "Google Chrome installed"
+    else
+        warn "Chrome may need manual install from https://google.com/chrome"
+    fi
+fi
+info "OpenClaw uses Chrome DevTools Protocol (CDP) for browser automation — configured automatically"
+
+# ============================================================
+# Step 6: Install Visual Studio Code
 # ============================================================
 step "Installing Visual Studio Code..."
 if [ -d "/Applications/Visual Studio Code.app" ]; then
