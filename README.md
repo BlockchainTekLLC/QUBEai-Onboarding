@@ -27,8 +27,24 @@ This repository contains onboarding and setup scripts for new QUBEai installatio
 
 ### macOS Installation
 
+**Step 1 — Pre-install** (keyboard, Telegram, VS Code, Claude Code):
+```bash
+curl -fsSL https://raw.githubusercontent.com/BlockchainTekLLC/QUBEai-Onboarding/master/pre-install.sh -o pre-install.sh
+chmod +x pre-install.sh && ./pre-install.sh
+```
+
+**Step 2 — Main install** (OpenClaw + agent config):
 ```bash
 curl -fsSL https://raw.githubusercontent.com/BlockchainTekLLC/QUBEai-Onboarding/master/install-macos.sh | bash
+```
+
+**Quick standalone scripts** (if you just need one thing):
+```bash
+# PC keyboard fix (Karabiner + VS Code)
+curl -fsSL https://raw.githubusercontent.com/BlockchainTekLLC/QUBEai-Onboarding/master/keyboard-setup.sh | bash
+
+# VS Code only
+brew install --cask visual-studio-code
 ```
 
 The installer will:

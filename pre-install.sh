@@ -3,9 +3,23 @@
 # QUBEai Pre-Install: Keyboard + Claude Code Setup
 # Run this FIRST if you have a PC keyboard and/or need a
 # Claude API setup token before the main install.
+#
+# IMPORTANT: Download then run — do NOT pipe through curl|bash
+#   curl -fsSL https://raw.githubusercontent.com/BlockchainTekLLC/QUBEai-Onboarding/master/pre-install.sh -o pre-install.sh
+#   chmod +x pre-install.sh && ./pre-install.sh
 # ============================================================
 
 set -e
+
+# Ensure we have an interactive terminal (needed for sudo/Homebrew)
+if [ ! -t 0 ]; then
+    echo "❌ This script must be run interactively (not piped)."
+    echo ""
+    echo "Please run these commands instead:"
+    echo "  curl -fsSL https://raw.githubusercontent.com/BlockchainTekLLC/QUBEai-Onboarding/master/pre-install.sh -o pre-install.sh"
+    echo "  chmod +x pre-install.sh && ./pre-install.sh"
+    exit 1
+fi
 
 # Colors
 RED='\033[0;31m'
