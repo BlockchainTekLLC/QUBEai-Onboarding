@@ -119,7 +119,92 @@ else
 fi
 
 # ============================================================
-# Step 4: Install Claude Code
+# Step 4: Install Telegram & Create Bot
+# ============================================================
+step "Setting up Telegram..."
+
+# Install Telegram Desktop
+if [ -d "/Applications/Telegram.app" ]; then
+    log "Telegram Desktop already installed"
+else
+    info "Installing Telegram Desktop..."
+    brew install --cask telegram 2>&1 | tail -5 || warn "Telegram install had issues"
+    if [ -d "/Applications/Telegram.app" ]; then
+        log "Telegram Desktop installed"
+    else
+        warn "Telegram may need manual install from https://macos.telegram.org"
+    fi
+fi
+
+# Guide through bot creation
+echo ""
+echo -e "${BOLD}${CYAN}━━━ Telegram Bot Setup ━━━${NC}"
+echo ""
+echo -e "  We need to create a Telegram bot for your AI assistant."
+echo -e "  This takes about 60 seconds. Here's what to do:"
+echo ""
+echo -e "  ${BOLD}1.${NC} Open Telegram (we'll launch it for you)"
+echo -e "  ${BOLD}2.${NC} We'll open a chat with @BotFather (Telegram's bot creator)"
+echo -e "  ${BOLD}3.${NC} Send: ${CYAN}/newbot${NC}"
+echo -e "  ${BOLD}4.${NC} Choose a ${BOLD}display name${NC} for your bot (e.g., 'My AI Assistant')"
+echo -e "  ${BOLD}5.${NC} Choose a ${BOLD}username${NC} ending in 'bot' (e.g., 'jetts_ai_bot')"
+echo -e "  ${BOLD}6.${NC} BotFather will give you a ${BOLD}token${NC} — copy it!"
+echo ""
+
+# Launch Telegram
+if [ -d "/Applications/Telegram.app" ]; then
+    read -p "$(echo -e ${BOLD})Press Enter to open Telegram and BotFather... $(echo -e ${NC})"
+    open -a "Telegram" 2>/dev/null || true
+    sleep 2
+    open "https://t.me/BotFather" 2>/dev/null || true
+fi
+
+echo ""
+echo -e "${YELLOW}After you create the bot, paste the token below.${NC}"
+echo -e "${YELLOW}It looks like: 123456789:ABCdefGHIjklMNOpqrsTUVwxyz${NC}"
+echo ""
+read -s -p "$(echo -e ${BOLD})Paste your bot token here: $(echo -e ${NC})" BOT_TOKEN
+echo ""
+
+if [ -n "$BOT_TOKEN" ]; then
+    # Save token for the main install script to pick up
+    mkdir -p "${HOME_DIR}/.qubeai"
+    echo "$BOT_TOKEN" > "${HOME_DIR}/.qubeai/bot-token"
+    chmod 600 "${HOME_DIR}/.qubeai/bot-token"
+    log "Bot token saved securely"
+else
+    warn "No token entered — you'll need it during the main install"
+fi
+
+# Get Telegram user info
+echo ""
+echo -e "${BOLD}${CYAN}━━━ Your Telegram Info ━━━${NC}"
+echo ""
+echo -e "  We also need YOUR Telegram username and user ID."
+echo -e "  To get your user ID:"
+echo -e "    1. Open this link: ${CYAN}https://t.me/userinfobot${NC}"
+echo -e "    2. Send ${CYAN}/start${NC}"
+echo -e "    3. It will reply with your numeric ID"
+echo ""
+open "https://t.me/userinfobot" 2>/dev/null || true
+
+read -p "$(echo -e ${BOLD})Your Telegram @username (e.g., @jett): $(echo -e ${NC})" TG_USERNAME
+[[ -n "$TG_USERNAME" && "$TG_USERNAME" != @* ]] && TG_USERNAME="@$TG_USERNAME"
+
+read -p "$(echo -e ${BOLD})Your Telegram numeric user ID: $(echo -e ${NC})" TG_USERID
+if [[ -n "$TG_USERID" && ! "$TG_USERID" =~ ^[0-9]+$ ]]; then
+    warn "That doesn't look like a numeric ID — double-check with @userinfobot"
+fi
+
+# Save for main install
+if [ -n "$TG_USERNAME" ]; then
+    echo "$TG_USERNAME" > "${HOME_DIR}/.qubeai/tg-username"
+    echo "$TG_USERID" > "${HOME_DIR}/.qubeai/tg-userid"
+    log "Telegram info saved"
+fi
+
+# ============================================================
+# Step 5: Install Claude Code
 # ============================================================
 step "Installing Claude Code..."
 if command -v claude &>/dev/null; then

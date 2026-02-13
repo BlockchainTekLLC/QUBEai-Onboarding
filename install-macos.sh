@@ -67,16 +67,39 @@ read -s -p "$(echo -e ${BOLD})Anthropic API key: $(echo -e ${NC})" ANTHROPIC_KEY
 echo ""
 [ -z "$ANTHROPIC_KEY" ] && err "Anthropic API key is required"
 
-read -s -p "$(echo -e ${BOLD})Telegram bot token (from @BotFather): $(echo -e ${NC})" TELEGRAM_TOKEN
-echo ""
+# Check for saved values from pre-install
+SAVED_TOKEN=""
+SAVED_USERNAME=""
+SAVED_USERID=""
+[ -f "${HOME}/.qubeai/bot-token" ] && SAVED_TOKEN=$(cat "${HOME}/.qubeai/bot-token")
+[ -f "${HOME}/.qubeai/tg-username" ] && SAVED_USERNAME=$(cat "${HOME}/.qubeai/tg-username")
+[ -f "${HOME}/.qubeai/tg-userid" ] && SAVED_USERID=$(cat "${HOME}/.qubeai/tg-userid")
+
+if [ -n "$SAVED_TOKEN" ]; then
+    info "Found saved bot token from pre-install"
+    TELEGRAM_TOKEN="$SAVED_TOKEN"
+else
+    read -s -p "$(echo -e ${BOLD})Telegram bot token (from @BotFather): $(echo -e ${NC})" TELEGRAM_TOKEN
+    echo ""
+fi
 [ -z "$TELEGRAM_TOKEN" ] && err "Telegram bot token is required"
 
-read -p "$(echo -e ${BOLD})Your Telegram @username (e.g., @willmkultra): $(echo -e ${NC})" TELEGRAM_USER
+if [ -n "$SAVED_USERNAME" ]; then
+    info "Found saved Telegram username: ${SAVED_USERNAME}"
+    TELEGRAM_USER="$SAVED_USERNAME"
+else
+    read -p "$(echo -e ${BOLD})Your Telegram @username (e.g., @willmkultra): $(echo -e ${NC})" TELEGRAM_USER
+fi
 [ -z "$TELEGRAM_USER" ] && err "Telegram username is required"
 # Ensure @ prefix
 [[ "$TELEGRAM_USER" != @* ]] && TELEGRAM_USER="@$TELEGRAM_USER"
 
-read -p "$(echo -e ${BOLD})Your Telegram numeric user ID (send /start to @userinfobot to find it): $(echo -e ${NC})" TELEGRAM_ID
+if [ -n "$SAVED_USERID" ]; then
+    info "Found saved Telegram user ID: ${SAVED_USERID}"
+    TELEGRAM_ID="$SAVED_USERID"
+else
+    read -p "$(echo -e ${BOLD})Your Telegram numeric user ID (send /start to @userinfobot to find it): $(echo -e ${NC})" TELEGRAM_ID
+fi
 [ -z "$TELEGRAM_ID" ] && err "Telegram user ID is required"
 # Validate numeric
 [[ ! "$TELEGRAM_ID" =~ ^[0-9]+$ ]] && err "Telegram user ID must be numeric (got: $TELEGRAM_ID)"
