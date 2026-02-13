@@ -3,9 +3,23 @@
 # OpenClaw macOS Installer
 # Single-agent setup with Google services, elevated permissions
 # No sandbox — full access
+#
+# IMPORTANT: Download then run — do NOT pipe through curl|bash
+#   curl -fsSL https://raw.githubusercontent.com/BlockchainTekLLC/QUBEai-Onboarding/master/install-macos.sh -o install.sh
+#   chmod +x install.sh && ./install.sh
 # ============================================================
 
 set -e
+
+# Ensure we have an interactive terminal
+if [ ! -t 0 ]; then
+    echo "❌ This script needs interactive input and can't be piped."
+    echo ""
+    echo "Please run these commands instead:"
+    echo "  curl -fsSL https://raw.githubusercontent.com/BlockchainTekLLC/QUBEai-Onboarding/master/install-macos.sh -o install.sh"
+    echo "  chmod +x install.sh && ./install.sh"
+    exit 1
+fi
 
 # Colors
 RED='\033[0;31m'
