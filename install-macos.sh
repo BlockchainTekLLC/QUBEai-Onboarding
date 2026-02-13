@@ -271,7 +271,7 @@ cat > "${OPENCLAW_DIR}/openclaw.json" <<CFGEOF
     "noSandbox": false,
     "defaultProfile": "openclaw",
     "profiles": {
-      "openclaw": { "cdpPort": 9222 }
+      "openclaw": { "cdpPort": 9222, "color": "#4A90D9" }
     }
   },
   "auth": {
@@ -443,7 +443,7 @@ info "See: https://gogcli.sh for setup guide"
 # ============================================================
 step "Setting up auto-start service..."
 
-PLIST_PATH="${HOME_DIR}/Library/LaunchAgents/com.openclaw.gateway.plist"
+PLIST_PATH="${HOME_DIR}/Library/LaunchAgents/ai.openclaw.gateway.plist"
 OPENCLAW_BIN=$(which openclaw)
 
 cat > "${PLIST_PATH}" <<PLISTEOF
@@ -452,7 +452,7 @@ cat > "${PLIST_PATH}" <<PLISTEOF
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.openclaw.gateway</string>
+    <string>ai.openclaw.gateway</string>
     <key>ProgramArguments</key>
     <array>
         <string>${OPENCLAW_BIN}</string>
@@ -571,6 +571,6 @@ echo -e "    2. Set up Google services: ${CYAN}gog auth${NC}"
 echo -e "    3. Config: ${CYAN}nano ${OPENCLAW_DIR}/openclaw.json${NC}"
 echo ""
 echo -e "  ${BOLD}Auto-start:${NC} OpenClaw will start automatically on login."
-echo -e "  To disable: ${CYAN}launchctl bootout gui/\$(id -u) ~/Library/LaunchAgents/com.openclaw.gateway.plist${NC}"
+echo -e "  To disable: ${CYAN}launchctl bootout gui/\$(id -u) ~/Library/LaunchAgents/ai.openclaw.gateway.plist${NC}"
 echo ""
 log "You're all set! Send a message to your bot on Telegram. 🐾"
