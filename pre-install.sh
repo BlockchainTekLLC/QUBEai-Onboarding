@@ -67,14 +67,23 @@ fi
 # ============================================================
 step "Checking Homebrew..."
 if ! command -v brew &>/dev/null; then
-    info "Installing Homebrew (the macOS package manager)..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    # Add to PATH for Apple Silicon
+    # Check if brew is installed but not in PATH (Apple Silicon)
     if [ -f /opt/homebrew/bin/brew ]; then
-        echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "${HOME_DIR}/.zprofile"
-        eval "$(/opt/homebrew/bin/brew shellenv)"
+        info "Homebrew found but not in PATH — fixing..."
+    else
+        info "Installing Homebrew (the macOS package manager)..."
+        info "You may be asked for your password."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
-    log "Homebrew installed"
+    # Add to PATH for Apple Silicon (Homebrew doesn't do this automatically!)
+    if [ -f /opt/homebrew/bin/brew ]; then
+        echo >> "${HOME_DIR}/.zprofile"
+        echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> "${HOME_DIR}/.zprofile"
+        eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+        log "Homebrew installed and added to PATH"
+    else
+        err "Homebrew installation failed. Please try again."
+    fi
 else
     log "Homebrew already installed"
 fi
