@@ -88,8 +88,13 @@ read -p "$(echo -e ${BOLD})Model (default: anthropic/claude-opus-4-6): $(echo -e
 MODEL="${MODEL:-anthropic/claude-opus-4-6}"
 
 echo ""
+read -p "$(echo -e ${BOLD})Are you using a PC/Windows keyboard with this Mac? (y/N): $(echo -e ${NC})" PC_KEYBOARD
+PC_KEYBOARD=${PC_KEYBOARD:-n}
+
+echo ""
 info "Agent: ${AGENT_NAME} | Model: ${MODEL} | TZ: ${TIMEZONE}"
 info "Telegram: ${TELEGRAM_USER} (${TELEGRAM_ID})"
+[[ "$PC_KEYBOARD" == [yY]* ]] && info "PC Keyboard: Will install Karabiner-Elements for key remapping"
 echo ""
 read -p "Proceed with installation? (y/N) " CONFIRM
 [[ "$CONFIRM" != [yY]* ]] && { echo "Aborted."; exit 0; }
@@ -185,7 +190,37 @@ else
 fi
 
 # ============================================================
-# Step 6: Create directory structure
+# Step 6b: Karabiner-Elements (PC Keyboard support)
+# ============================================================
+if [[ "$PC_KEYBOARD" == [yY]* ]]; then
+    step "Setting up PC keyboard support (Karabiner-Elements)..."
+    if [ -d "/Applications/Karabiner-Elements.app" ]; then
+        log "Karabiner-Elements already installed"
+    else
+        info "Installing Karabiner-Elements..."
+        brew install --cask karabiner-elements 2>&1 | tail -5 || warn "Karabiner install had issues"
+        if [ -d "/Applications/Karabiner-Elements.app" ]; then
+            log "Karabiner-Elements installed"
+        else
+            warn "Karabiner-Elements may need manual install from https://karabiner-elements.pqrs.org"
+        fi
+    fi
+
+    # Apply PC keyboard config
+    KARABINER_DIR="${HOME_DIR}/.config/karabiner"
+    mkdir -p "${KARABINER_DIR}"
+    KARABINER_URL="https://raw.githubusercontent.com/BlockchainTekLLC/QUBEai-Onboarding/master/assets/karabiner/karabiner.json"
+    if curl -fsSL "${KARABINER_URL}" -o "${KARABINER_DIR}/karabiner.json" 2>/dev/null; then
+        log "PC keyboard mappings applied (Ctrl→⌘ for copy/paste/save/etc.)"
+        info "Mappings include: copy, cut, paste, undo, redo, save, tabs, screenshots, and more"
+        info "You may need to grant Karabiner accessibility permissions in System Settings → Privacy & Security"
+    else
+        warn "Could not download keyboard config — you can manually copy from the QUBEai-Onboarding repo"
+    fi
+fi
+
+# ============================================================
+# Step 7: Create directory structure
 # ============================================================
 step "Setting up directory structure..."
 mkdir -p "${OPENCLAW_DIR}/workspaces/${AGENT_NAME}"
