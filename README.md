@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo-blue.png" alt="BlockchainTek" width="400">
+</p>
+
 # QUBEai - AI Assistant Appliance
 
 **Quick setup scripts for QUBEai installations**
