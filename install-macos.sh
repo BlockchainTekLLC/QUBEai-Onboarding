@@ -532,11 +532,11 @@ step "Running post-install verification..."
 CHECKS_PASSED=0
 CHECKS_TOTAL=5
 
-command -v openclaw &>/dev/null && { log "openclaw binary: OK"; ((CHECKS_PASSED++)); } || warn "openclaw binary: NOT FOUND"
-command -v node &>/dev/null && { log "Node.js: OK ($(node --version))"; ((CHECKS_PASSED++)); } || warn "Node.js: NOT FOUND"
-[ -f "${OPENCLAW_DIR}/openclaw.json" ] && { log "Config file: OK"; ((CHECKS_PASSED++)); } || warn "Config file: MISSING"
-[ -f "${OPENCLAW_DIR}/auth/anthropic_default.json" ] && { log "Auth file: OK"; ((CHECKS_PASSED++)); } || warn "Auth file: MISSING"
-[ -f "${PLIST_PATH}" ] && { log "LaunchAgent: OK"; ((CHECKS_PASSED++)); } || warn "LaunchAgent: MISSING"
+if command -v openclaw &>/dev/null; then log "openclaw binary: OK"; CHECKS_PASSED=$((CHECKS_PASSED+1)); else warn "openclaw binary: NOT FOUND"; fi
+if command -v node &>/dev/null; then log "Node.js: OK ($(node --version))"; CHECKS_PASSED=$((CHECKS_PASSED+1)); else warn "Node.js: NOT FOUND"; fi
+if [ -f "${OPENCLAW_DIR}/openclaw.json" ]; then log "Config file: OK"; CHECKS_PASSED=$((CHECKS_PASSED+1)); else warn "Config file: MISSING"; fi
+if [ -f "${OPENCLAW_DIR}/auth/anthropic_default.json" ]; then log "Auth file: OK"; CHECKS_PASSED=$((CHECKS_PASSED+1)); else warn "Auth file: MISSING"; fi
+if [ -f "${PLIST_PATH}" ]; then log "LaunchAgent: OK"; CHECKS_PASSED=$((CHECKS_PASSED+1)); else warn "LaunchAgent: MISSING"; fi
 
 echo ""
 if [ "$CHECKS_PASSED" -eq "$CHECKS_TOTAL" ]; then
