@@ -1,0 +1,140 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.2.12",
+    "lastTouchedAt": "2026-02-13T17:51:14.609Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-02-13T17:47:02.101Z",
+    "lastRunVersion": "2026.2.12",
+    "lastRunCommand": "onboard",
+    "lastRunMode": "local"
+  },
+  "auth": {
+    "profiles": {
+      "anthropic:default": {
+        "provider": "anthropic",
+        "mode": "token"
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": { "primary": "anthropic/claude-opus-4-6", "fallbacks": [] },
+      "workspace": "/Users/macmini/.openclaw/workspaces",
+      "compaction": { "mode": "safeguard" },
+      "elevatedDefault": "full",
+      "maxConcurrent": 4,
+      "subagents": { "maxConcurrent": 8 },
+      "sandbox": { "mode": "off" }
+    },
+    "list": [
+      { "id": "main" },
+      {
+        "id": "jett",
+        "name": "jett",
+        "workspace": "/Users/macmini/.openclaw/workspaces/jett",
+        "model": "anthropic/claude-opus-4-6",
+        "heartbeat": {
+          "every": "30m",
+          "activeHours": { "timezone": "America/New_York" },
+          "target": "telegram",
+          "to": "7939277149"
+        },
+        "sandbox": {
+          "mode": "off",
+          "workspaceAccess": "rw",
+          "workspaceRoot": "/Users/macmini/.openclaw/workspaces/jett"
+        },
+        "tools": {
+          "profile": "full",
+          "elevated": {
+            "enabled": true,
+            "allowFrom": {
+              "telegram": ["@shackleford10"]
+            }
+          }
+        }
+      }
+    ]
+  },
+  "models": { "mode": "merge", "providers": {} },
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "bash": true
+  },
+  "cron": { "enabled": true },
+  "browser": {
+    "enabled": true,
+    "executablePath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "headless": false,
+    "noSandbox": false,
+    "defaultProfile": "openclaw",
+    "profiles": {
+      "openclaw": { "cdpPort": 9222, "color": "#4A90D9" }
+    }
+  },
+  "tools": {
+    "profile": "full",
+    "web": {
+      "search": { "enabled": true },
+      "fetch": { "enabled": true }
+    },
+    "elevated": {
+      "enabled": true,
+      "allowFrom": {
+        "telegram": ["@shackleford10"]
+      }
+    },
+    "exec": {
+      "host": "sandbox",
+      "security": "full",
+      "ask": "off"
+    }
+  },
+  "bindings": [
+    {
+      "agentId": "jett",
+      "match": { "channel": "telegram" }
+    }
+  ],
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "configWrites": true,
+      "dmPolicy": "pairing",
+      "botToken": "8025123997:AAFiWlxNYnI4BeKgelGIjT3VeOtLG3irB7Q",
+      "allowFrom": ["@shackleford10", 7939277149],
+      "groupPolicy": "allowlist",
+      "chunkMode": "length",
+      "blockStreaming": false,
+      "streamMode": "partial"
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "15fc1da4d422e0cf6d82a3ee130beb473937ee041ce6b53c"
+    },
+    "tailscale": { "mode": "off", "resetOnExit": false },
+    "nodes": {
+      "denyCommands": ["camera.snap", "camera.clip", "screen.record", "calendar.add", "contacts.add", "reminders.add"]
+    },
+    "http": {
+      "endpoints": {
+        "chatCompletions": { "enabled": true }
+      }
+    }
+  },
+  "plugins": {
+    "entries": {
+      "telegram": { "enabled": true }
+    }
+  }
+}
