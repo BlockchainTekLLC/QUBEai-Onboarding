@@ -30,4 +30,16 @@ echo -e "   System Settings → Privacy & Security → Input Monitoring"
 echo ""
 
 open -a "Karabiner-Elements" 2>/dev/null || true
-echo -e "${GREEN}✅ Done! Your Ctrl+C/V/Z/S shortcuts now work like a PC. 🎉${NC}"
+echo -e "${GREEN}✅ Keyboard done! Your Ctrl+C/V/Z/S shortcuts now work like a PC.${NC}"
+
+# VS Code
+echo ""
+if [ -d "/Applications/Visual Studio Code.app" ]; then
+    echo -e "${GREEN}✅ VS Code already installed${NC}"
+else
+    echo -e "${BLUE}Installing Visual Studio Code...${NC}"
+    brew install --cask visual-studio-code 2>&1 | tail -5
+    echo -e "${GREEN}✅ VS Code installed${NC}"
+fi
+
+echo -e "${GREEN}✅ All done! 🎉${NC}"
