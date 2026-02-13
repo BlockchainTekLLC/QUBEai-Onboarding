@@ -84,8 +84,8 @@ read -p "$(echo -e ${BOLD})Your Telegram numeric user ID (send /start to @userin
 read -p "$(echo -e ${BOLD})Timezone (e.g., America/Chicago): $(echo -e ${NC})" TIMEZONE
 TIMEZONE="${TIMEZONE:-America/Chicago}"
 
-read -p "$(echo -e ${BOLD})Model (default: anthropic/claude-sonnet-4): $(echo -e ${NC})" MODEL
-MODEL="${MODEL:-anthropic/claude-sonnet-4}"
+read -p "$(echo -e ${BOLD})Model (default: anthropic/claude-opus-4-6): $(echo -e ${NC})" MODEL
+MODEL="${MODEL:-anthropic/claude-opus-4-6}"
 
 echo ""
 info "Agent: ${AGENT_NAME} | Model: ${MODEL} | TZ: ${TIMEZONE}"
