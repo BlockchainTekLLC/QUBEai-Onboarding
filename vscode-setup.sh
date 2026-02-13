@@ -11,9 +11,15 @@ if [ -d "/Applications/Visual Studio Code.app" ]; then
 fi
 
 if ! command -v brew &>/dev/null; then
-    echo -e "${BLUE}Installing Homebrew first...${NC}"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    # Try sourcing brew from default location first
     [ -f /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+if ! command -v brew &>/dev/null; then
+    echo -e "${BLUE}Homebrew not found. Please install it first:${NC}"
+    echo -e "  /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+    echo -e "Then re-run this script."
+    exit 1
 fi
 
 brew install --cask visual-studio-code

@@ -7,9 +7,14 @@ echo -e "\n${BOLD}🎹 PC Keyboard Setup for Mac${NC}\n"
 
 # Homebrew
 if ! command -v brew &>/dev/null; then
-    echo -e "${BLUE}Installing Homebrew...${NC}"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     [ -f /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+if ! command -v brew &>/dev/null; then
+    echo -e "${BLUE}Homebrew not found. Please install it first:${NC}"
+    echo -e "  /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+    echo -e "Then re-run this script."
+    exit 1
 fi
 
 # Karabiner
