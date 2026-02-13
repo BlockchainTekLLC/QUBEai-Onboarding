@@ -34,6 +34,26 @@ step() { echo -e "\n${BOLD}${CYAN}▶ $1${NC}"; }
 print_banner
 
 # ============================================================
+# Pre-flight checks
+# ============================================================
+step "Running pre-flight checks..."
+
+# Must be macOS
+[[ "$(uname)" != "Darwin" ]] && err "This script is for macOS only. Use install-ubuntu.sh for Linux."
+
+# Must have internet
+if ! curl -sf --max-time 5 https://registry.npmjs.org/ > /dev/null 2>&1; then
+    err "No internet connection detected. Please check your network and try again."
+fi
+log "macOS detected, internet connection OK"
+
+# Check disk space (need ~2GB)
+AVAIL_GB=$(df -g "$HOME" | awk 'NR==2 {print $4}')
+if [ "$AVAIL_GB" -lt 2 ] 2>/dev/null; then
+    warn "Low disk space (${AVAIL_GB}GB free). At least 2GB recommended."
+fi
+
+# ============================================================
 # Gather info upfront
 # ============================================================
 step "Let's configure your OpenClaw instance"
@@ -43,10 +63,12 @@ read -p "$(echo -e ${BOLD})Agent name (e.g., jett, assistant): $(echo -e ${NC})"
 AGENT_NAME="${AGENT_NAME:-assistant}"
 AGENT_NAME=$(echo "$AGENT_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
 
-read -p "$(echo -e ${BOLD})Anthropic API key: $(echo -e ${NC})" ANTHROPIC_KEY
+read -s -p "$(echo -e ${BOLD})Anthropic API key: $(echo -e ${NC})" ANTHROPIC_KEY
+echo ""
 [ -z "$ANTHROPIC_KEY" ] && err "Anthropic API key is required"
 
-read -p "$(echo -e ${BOLD})Telegram bot token (from @BotFather): $(echo -e ${NC})" TELEGRAM_TOKEN
+read -s -p "$(echo -e ${BOLD})Telegram bot token (from @BotFather): $(echo -e ${NC})" TELEGRAM_TOKEN
+echo ""
 [ -z "$TELEGRAM_TOKEN" ] && err "Telegram bot token is required"
 
 read -p "$(echo -e ${BOLD})Your Telegram @username (e.g., @willmkultra): $(echo -e ${NC})" TELEGRAM_USER
@@ -54,8 +76,10 @@ read -p "$(echo -e ${BOLD})Your Telegram @username (e.g., @willmkultra): $(echo 
 # Ensure @ prefix
 [[ "$TELEGRAM_USER" != @* ]] && TELEGRAM_USER="@$TELEGRAM_USER"
 
-read -p "$(echo -e ${BOLD})Your Telegram numeric user ID: $(echo -e ${NC})" TELEGRAM_ID
+read -p "$(echo -e ${BOLD})Your Telegram numeric user ID (send /start to @userinfobot to find it): $(echo -e ${NC})" TELEGRAM_ID
 [ -z "$TELEGRAM_ID" ] && err "Telegram user ID is required"
+# Validate numeric
+[[ ! "$TELEGRAM_ID" =~ ^[0-9]+$ ]] && err "Telegram user ID must be numeric (got: $TELEGRAM_ID)"
 
 read -p "$(echo -e ${BOLD})Timezone (e.g., America/Chicago): $(echo -e ${NC})" TIMEZONE
 TIMEZONE="${TIMEZONE:-America/Chicago}"
@@ -310,11 +334,13 @@ log "Config written to ${OPENCLAW_DIR}/openclaw.json"
 # ============================================================
 step "Creating workspace files..."
 
-cat > "${OPENCLAW_DIR}/workspaces/${AGENT_NAME}/MEMORY.md" <<'MEMEOF'
+CREATED_DATE=$(date +%Y-%m-%d)
+cat > "${OPENCLAW_DIR}/workspaces/${AGENT_NAME}/MEMORY.md" <<MEMEOF
 # Memory
 
 ## Agent Identity
-- **Created**: $(date +%Y-%m-%d)
+- **Name**: ${AGENT_NAME}
+- **Created**: ${CREATED_DATE}
 
 ## Persistent Knowledge
 (Will be populated as you interact)
@@ -422,9 +448,9 @@ export ANTHROPIC_API_KEY="${ANTHROPIC_KEY}"
 # ============================================================
 step "Starting OpenClaw..."
 
-# Load the service
-launchctl load "${PLIST_PATH}" 2>/dev/null || true
-sleep 3
+# Load the service (bootstrap is the modern way, fall back to load)
+launchctl bootstrap "gui/$(id -u)" "${PLIST_PATH}" 2>/dev/null || launchctl load "${PLIST_PATH}" 2>/dev/null || true
+sleep 5
 
 # Check if running
 if openclaw gateway status 2>/dev/null | grep -qi "running\|online\|ok"; then
@@ -432,12 +458,33 @@ if openclaw gateway status 2>/dev/null | grep -qi "running\|online\|ok"; then
 else
     info "Trying direct start..."
     openclaw gateway start &
-    sleep 3
-    if openclaw gateway status 2>/dev/null; then
+    sleep 5
+    if openclaw gateway status 2>/dev/null | grep -qi "running\|online\|ok"; then
         log "OpenClaw gateway started!"
     else
         warn "Gateway may need manual start. Try: openclaw gateway start"
     fi
+fi
+
+# ============================================================
+# Post-install verification
+# ============================================================
+step "Running post-install verification..."
+
+CHECKS_PASSED=0
+CHECKS_TOTAL=5
+
+command -v openclaw &>/dev/null && { log "openclaw binary: OK"; ((CHECKS_PASSED++)); } || warn "openclaw binary: NOT FOUND"
+command -v node &>/dev/null && { log "Node.js: OK ($(node --version))"; ((CHECKS_PASSED++)); } || warn "Node.js: NOT FOUND"
+[ -f "${OPENCLAW_DIR}/openclaw.json" ] && { log "Config file: OK"; ((CHECKS_PASSED++)); } || warn "Config file: MISSING"
+[ -f "${OPENCLAW_DIR}/auth/anthropic_default.json" ] && { log "Auth file: OK"; ((CHECKS_PASSED++)); } || warn "Auth file: MISSING"
+[ -f "${PLIST_PATH}" ] && { log "LaunchAgent: OK"; ((CHECKS_PASSED++)); } || warn "LaunchAgent: MISSING"
+
+echo ""
+if [ "$CHECKS_PASSED" -eq "$CHECKS_TOTAL" ]; then
+    log "All ${CHECKS_TOTAL}/${CHECKS_TOTAL} checks passed! ✨"
+else
+    warn "${CHECKS_PASSED}/${CHECKS_TOTAL} checks passed — review warnings above"
 fi
 
 # ============================================================
@@ -466,6 +513,6 @@ echo -e "    2. Set up Google services: ${CYAN}gog auth${NC}"
 echo -e "    3. Config: ${CYAN}nano ${OPENCLAW_DIR}/openclaw.json${NC}"
 echo ""
 echo -e "  ${BOLD}Auto-start:${NC} OpenClaw will start automatically on login."
-echo -e "  To disable: ${CYAN}launchctl unload ~/Library/LaunchAgents/com.openclaw.gateway.plist${NC}"
+echo -e "  To disable: ${CYAN}launchctl bootout gui/\$(id -u) ~/Library/LaunchAgents/com.openclaw.gateway.plist${NC}"
 echo ""
 log "You're all set! Send a message to your bot on Telegram. 🐾"

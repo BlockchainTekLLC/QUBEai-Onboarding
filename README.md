@@ -28,9 +28,7 @@ This repository contains onboarding and setup scripts for new QUBEai installatio
 ### macOS Installation
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/BlockchainTekLLC/QUBEai-Onboarding/main/install-macos.sh -o install-macos.sh
-chmod +x install-macos.sh
-./install-macos.sh
+curl -fsSL https://raw.githubusercontent.com/BlockchainTekLLC/QUBEai-Onboarding/master/install-macos.sh | bash
 ```
 
 The installer will:
