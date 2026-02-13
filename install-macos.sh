@@ -147,14 +147,34 @@ else
 fi
 
 # ============================================================
-# Step 4: Install OpenClaw
+# Step 4: Install Claude Code
+# ============================================================
+step "Installing Claude Code..."
+if command -v claude &>/dev/null; then
+    log "Claude Code already installed"
+else
+    curl -fsSL https://claude.ai/install.sh | bash
+    # Ensure ~/.local/bin is in PATH
+    if ! echo "$PATH" | grep -q "$HOME/.local/bin"; then
+        echo 'export PATH="$HOME/.local/bin:$PATH"' >> "${HOME_DIR}/.zshrc"
+        export PATH="$HOME/.local/bin:$PATH"
+    fi
+    if command -v claude &>/dev/null; then
+        log "Claude Code installed"
+    else
+        warn "Claude Code installed but may need terminal restart to be in PATH"
+    fi
+fi
+
+# ============================================================
+# Step 5: Install OpenClaw
 # ============================================================
 step "Installing OpenClaw..."
 npm install -g openclaw 2>&1 | tail -5
 log "OpenClaw installed: $(openclaw --version 2>/dev/null || echo 'checking...')"
 
 # ============================================================
-# Step 5: Install gog (Google Workspace CLI)
+# Step 6: Install gog (Google Workspace CLI)
 # ============================================================
 step "Installing gog (Google Workspace CLI)..."
 brew install steipete/tap/gogcli 2>&1 | tail -3 || warn "gog install had issues — may already be installed"
