@@ -204,7 +204,22 @@ if [ -n "$TG_USERNAME" ]; then
 fi
 
 # ============================================================
-# Step 5: Install Claude Code
+# Step 5: Install Visual Studio Code
+# ============================================================
+step "Installing Visual Studio Code..."
+if [ -d "/Applications/Visual Studio Code.app" ]; then
+    log "VS Code already installed"
+else
+    brew install --cask visual-studio-code 2>&1 | tail -5
+    if [ -d "/Applications/Visual Studio Code.app" ]; then
+        log "VS Code installed"
+    else
+        warn "VS Code may need manual install from https://code.visualstudio.com"
+    fi
+fi
+
+# ============================================================
+# Step 6: Install Claude Code
 # ============================================================
 step "Installing Claude Code..."
 if command -v claude &>/dev/null; then
