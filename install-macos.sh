@@ -518,6 +518,10 @@ export ANTHROPIC_API_KEY="${ANTHROPIC_KEY}"
 # ============================================================
 step "Starting OpenClaw..."
 
+# Install the gateway service first (registers token properly)
+info "Installing gateway service..."
+openclaw gateway install 2>/dev/null || true
+
 # Load the service (bootstrap is the modern way, fall back to load)
 launchctl bootstrap "gui/$(id -u)" "${PLIST_PATH}" 2>/dev/null || launchctl load "${PLIST_PATH}" 2>/dev/null || true
 sleep 5
@@ -526,13 +530,17 @@ sleep 5
 if openclaw gateway status 2>/dev/null | grep -qi "running\|online\|ok"; then
     log "OpenClaw gateway is running! 🎉"
 else
-    info "Trying direct start..."
+    info "Starting gateway..."
     openclaw gateway start &
     sleep 5
     if openclaw gateway status 2>/dev/null | grep -qi "running\|online\|ok"; then
         log "OpenClaw gateway started!"
     else
-        warn "Gateway may need manual start. Try: openclaw gateway start"
+        warn "Gateway may need manual start."
+        echo ""
+        info "Run: openclaw gateway start"
+        info "If it shows a dashboard URL, open it in Chrome and paste the token shown."
+        info "This is a one-time setup step."
     fi
 fi
 
