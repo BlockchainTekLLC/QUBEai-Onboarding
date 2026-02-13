@@ -77,17 +77,23 @@ read -p "$(echo -e ${BOLD})Agent name (e.g., jett, assistant): $(echo -e ${NC})"
 AGENT_NAME="${AGENT_NAME:-assistant}"
 AGENT_NAME=$(echo "$AGENT_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
 
+# Helper: sanitize pasted input (strip newlines, whitespace, control chars)
+sanitize() { echo "$1" | tr -d '\n\r\t ' ; }
+
 read -s -p "$(echo -e ${BOLD})Anthropic API key: $(echo -e ${NC})" ANTHROPIC_KEY
 echo ""
+ANTHROPIC_KEY=$(sanitize "$ANTHROPIC_KEY")
 [ -z "$ANTHROPIC_KEY" ] && err "Anthropic API key is required"
+[[ ! "$ANTHROPIC_KEY" =~ ^sk-ant- ]] && warn "API key doesn't start with 'sk-ant-' — are you sure it's correct?"
+info "API key: sk-ant-****${ANTHROPIC_KEY: -4}"
 
 # Check for saved values from pre-install
 SAVED_TOKEN=""
 SAVED_USERNAME=""
 SAVED_USERID=""
-[ -f "${HOME}/.qubeai/bot-token" ] && SAVED_TOKEN=$(cat "${HOME}/.qubeai/bot-token")
-[ -f "${HOME}/.qubeai/tg-username" ] && SAVED_USERNAME=$(cat "${HOME}/.qubeai/tg-username")
-[ -f "${HOME}/.qubeai/tg-userid" ] && SAVED_USERID=$(cat "${HOME}/.qubeai/tg-userid")
+[ -f "${HOME}/.qubeai/bot-token" ] && SAVED_TOKEN=$(sanitize "$(cat "${HOME}/.qubeai/bot-token")")
+[ -f "${HOME}/.qubeai/tg-username" ] && SAVED_USERNAME=$(cat "${HOME}/.qubeai/tg-username" | tr -d '\n\r\t')
+[ -f "${HOME}/.qubeai/tg-userid" ] && SAVED_USERID=$(sanitize "$(cat "${HOME}/.qubeai/tg-userid")")
 
 if [ -n "$SAVED_TOKEN" ]; then
     info "Found saved bot token from pre-install"
@@ -96,7 +102,11 @@ else
     read -s -p "$(echo -e ${BOLD})Telegram bot token (from @BotFather): $(echo -e ${NC})" TELEGRAM_TOKEN
     echo ""
 fi
+TELEGRAM_TOKEN=$(sanitize "$TELEGRAM_TOKEN")
 [ -z "$TELEGRAM_TOKEN" ] && err "Telegram bot token is required"
+[[ ! "$TELEGRAM_TOKEN" =~ ^[0-9]+: ]] && warn "Bot token doesn't match expected format (should be like 123456789:ABC...) — are you sure it's correct?"
+# Show last 4 chars for confirmation
+info "Bot token: ****${TELEGRAM_TOKEN: -4}"
 
 if [ -n "$SAVED_USERNAME" ]; then
     info "Found saved Telegram username: ${SAVED_USERNAME}"
@@ -114,9 +124,11 @@ if [ -n "$SAVED_USERID" ]; then
 else
     read -p "$(echo -e ${BOLD})Your Telegram numeric user ID (send /start to @userinfobot to find it): $(echo -e ${NC})" TELEGRAM_ID
 fi
+TELEGRAM_ID=$(sanitize "$TELEGRAM_ID")
 [ -z "$TELEGRAM_ID" ] && err "Telegram user ID is required"
 # Validate numeric
 [[ ! "$TELEGRAM_ID" =~ ^[0-9]+$ ]] && err "Telegram user ID must be numeric (got: $TELEGRAM_ID)"
+info "Telegram user ID: ${TELEGRAM_ID}"
 
 read -p "$(echo -e ${BOLD})Timezone (e.g., America/Chicago): $(echo -e ${NC})" TIMEZONE
 TIMEZONE="${TIMEZONE:-America/Chicago}"
